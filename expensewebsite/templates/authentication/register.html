@@ -8,7 +8,7 @@
           <h4>Register for a free account</h4>
         </div>
 
-        <form action="" method="post">
+        <form action="{% url 'register' %}" method="post">
           {% csrf_token %} {% include 'partials/_messages.html' %}
           <div class="form-group mb-3">
             <input
@@ -17,6 +17,7 @@
               placeholder="Username"
               id="usernameField"
               class="form-control form-control-sm"
+              value="{{fieldValues.username}}"
             />
           </div>
           <div
@@ -31,6 +32,7 @@
               placeholder="Email"
               id="emailField"
               class="form-control form-control-sm"
+              value="{{fieldValues.email}}"
             />
           </div>
           <div
@@ -50,7 +52,11 @@
           </div>
           <div class="clearfix"></div>
           <div class="d-grid gap-2 mx-auto">
-            <input type="submit" value="Register" class="btn btn-primary" />
+            <input
+              type="submit"
+              value="Register"
+              class="btn btn-primary submit-btn"
+            />
           </div>
         </form>
       </div>
