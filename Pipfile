@@ -9,6 +9,7 @@ psycopg2-binary = "*"
 django-on-heroku = "*"
 gunicorn = "*"
 validate-email = "*"
+six = "*"
 
 [dev-packages]
 
