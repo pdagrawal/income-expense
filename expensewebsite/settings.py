@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
     "expensewebsite.apps.expenses.apps.ExpensesConfig",
     "expensewebsite.apps.authentication.apps.AuthenticationConfig",
     "expensewebsite.apps.userpreferences.apps.UserpreferencesConfig",

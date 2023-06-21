@@ -10,6 +10,7 @@ django-on-heroku = "*"
 gunicorn = "*"
 validate-email = "*"
 six = "*"
+django-extensions = "*"
 
 [dev-packages]
 

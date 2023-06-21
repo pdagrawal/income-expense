@@ -97,8 +97,10 @@ class RegistrationView(View):
                     email_subject, email_body, settings.DEFAULT_FROM_EMAIL, [email]
                 )
                 email_sender.send(fail_silently=False)
-                messages.success(request, "Account successfully created!")
-                return render(request, "authentication/register.html")
+                messages.success(
+                    request, "Account successfully created! Please verify before login!"
+                )
+                return render(request, "authentication/login.html")
 
         return render(request, "authentication/register.html")
 
@@ -136,7 +138,7 @@ class LoginView(View):
                     messages.success(
                         request, "Welcome, " + username + " You are now logged in!"
                     )
-                    return redirect("expenses")
+                    return redirect("expenses:index")
                 else:
                     messages.error(
                         request, "Account is not active, please check your email!"
