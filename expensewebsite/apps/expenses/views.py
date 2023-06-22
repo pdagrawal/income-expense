@@ -6,6 +6,8 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
+from expensewebsite.apps.userpreferences.models import UserPreference
+
 from .models import Category, Expense
 
 
@@ -15,7 +17,8 @@ def index(request):
     paginator = Paginator(expenses, 5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    context = {"expenses": expenses, "page_obj": page_obj}
+    currency = UserPreference.objects.get(user=request.user).currency
+    context = {"expenses": expenses, "page_obj": page_obj, "currency": currency}
     return render(request, "expenses/index.html", context)
 
 
@@ -24,7 +27,7 @@ def search(request):
         search_str = json.loads(request.body).get("searchValue", "")
         expenses = (
             Expense.objects.filter(owner=request.user, amount__istartswith=search_str)
-            | Expense.objects.filter(owner=request.user, date__istartswith=search_str)
+            | Expense.objects.filter(owner=request.user, date__icontains=search_str)
             | Expense.objects.filter(
                 owner=request.user, description__icontains=search_str
             )
