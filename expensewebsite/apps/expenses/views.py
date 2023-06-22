@@ -11,7 +11,7 @@ from expensewebsite.apps.userpreferences.models import UserPreference
 from .models import Category, Expense
 
 
-@login_required(login_url="/authentication/login")
+@login_required
 def index(request):
     expenses = Expense.objects.filter(owner=request.user)
     paginator = Paginator(expenses, 5)
@@ -37,6 +37,7 @@ def search(request):
         return JsonResponse(data, safe=False)
 
 
+@login_required
 def new(request):
     categories = Category.objects.all()
     context = {"categories": categories, "values": request.POST}
@@ -64,6 +65,7 @@ def new(request):
         return redirect("expenses:index")
 
 
+@login_required
 def edit(request, id):
     expense = Expense.objects.get(pk=id)
     categories = Category.objects.all()
@@ -91,6 +93,7 @@ def edit(request, id):
     return redirect("expenses:index")
 
 
+@login_required
 def delete(request, id):
     expense = Expense.objects.get(pk=id)
     expense.delete()
