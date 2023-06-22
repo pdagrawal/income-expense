@@ -1,5 +1,9 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
 from .models import Category, Expense
@@ -8,8 +12,26 @@ from .models import Category, Expense
 @login_required(login_url="/authentication/login")
 def index(request):
     expenses = Expense.objects.filter(owner=request.user)
-    context = {"expenses": expenses}
+    paginator = Paginator(expenses, 5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {"expenses": expenses, "page_obj": page_obj}
     return render(request, "expenses/index.html", context)
+
+
+def search(request):
+    if request.method == "POST":
+        search_str = json.loads(request.body).get("searchValue", "")
+        expenses = (
+            Expense.objects.filter(owner=request.user, amount__istartswith=search_str)
+            | Expense.objects.filter(owner=request.user, date__istartswith=search_str)
+            | Expense.objects.filter(
+                owner=request.user, description__icontains=search_str
+            )
+            | Expense.objects.filter(owner=request.user, category__icontains=search_str)
+        )
+        data = list(expenses.values())
+        return JsonResponse(data, safe=False)
 
 
 def new(request):
