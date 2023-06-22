@@ -1,0 +1,22 @@
+#header {
+    background: rgb(7, 58, 49);
+    color: #ffffff;;
+}
+
+#branding h1 {
+    color: #ffffff;
+}
+
+div.breadcrumbs {
+    background: rgb(15, 106, 167);
+    color: #ffffff;
+}
+
+.submit-row input {
+    width: 100%;
+    background: rgb(7, 58, 49);
+}
+
+.module caption {
+    background: rgb(7, 58, 49);
+}
