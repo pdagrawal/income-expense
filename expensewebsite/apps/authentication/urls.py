@@ -5,7 +5,9 @@ from django.views.decorators.csrf import csrf_exempt
 from .views import (
     EmailValidationView,
     LoginView,
+    PasswordReset,
     RegistrationView,
+    RequestPasswordResetEmail,
     UsernameValidationView,
     VerificationView,
 )
@@ -25,4 +27,12 @@ urlpatterns = [
         name="validate-email",
     ),
     path("activate/<uidb64>/<token>", VerificationView.as_view(), name="activate"),
+    path(
+        "request-reset-link",
+        RequestPasswordResetEmail.as_view(),
+        name="request-password",
+    ),
+    path(
+        "reset-pasword/<uidb64>/<token>", PasswordReset.as_view(), name="reset-pasword"
+    ),
 ]
