@@ -1,4 +1,7 @@
 import json
+from collections.abc import Callable, Iterable, Mapping
+from threading import Thread
+from typing import Any
 
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
@@ -17,6 +20,15 @@ from validate_email import validate_email
 from expensewebsite import settings
 
 from .tokens import token_generator
+
+
+class EmailThread(Thread):
+    def __init__(self, email):
+        self.email = email
+        Thread.__init__(self)
+
+    def run(self):
+        self.email.send(fail_silently=False)
 
 
 class UsernameValidationView(View):
@@ -97,7 +109,7 @@ class RegistrationView(View):
                 email_sender = EmailMessage(
                     email_subject, email_body, settings.DEFAULT_FROM_EMAIL, [email]
                 )
-                email_sender.send(fail_silently=False)
+                EmailThread(email_sender).start()
                 messages.success(
                     request, "Account successfully created! Please verify before login!"
                 )
@@ -189,7 +201,7 @@ class RequestPasswordResetEmail(View):
                     settings.DEFAULT_FROM_EMAIL,
                     [email],
                 )
-                email_sender.send(fail_silently=False)
+                EmailThread(email_sender).start()
             messages.success(
                 request, "Reset password link sent! Please check your email!"
             )

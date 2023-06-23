@@ -1,8 +1,10 @@
+import datetime
 import json
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
@@ -99,3 +101,25 @@ def delete(request, id):
     expense.delete()
     messages.success(request, "Expense deleted successfully!")
     return redirect("expenses:index")
+
+
+def expense_category_summary(request):
+    today = datetime.date.today()
+    six_months_ago = today - datetime.timedelta(days=180)
+    total_sums = (
+        Expense.objects.filter(
+            owner=request.user, date__gte=six_months_ago, date__lte=today
+        )
+        .values("category")
+        .annotate(total=Sum("amount"))
+    )
+    expense_category_data = {}
+
+    for item in total_sums:
+        expense_category_data[item["category"]] = item["total"]
+
+    return JsonResponse({"expense_category_data": expense_category_data}, safe=False)
+
+
+def stats(request):
+    return render(request, "expenses/stats.html")
