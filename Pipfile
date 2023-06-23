@@ -11,6 +11,7 @@ gunicorn = "*"
 validate-email = "*"
 six = "*"
 django-extensions = "*"
+xlwt = "*"
 
 [dev-packages]
 
